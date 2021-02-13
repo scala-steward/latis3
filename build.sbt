@@ -4,6 +4,7 @@ ThisBuild / scalaVersion := "2.13.5"
 val attoVersion       = "0.9.2"
 val catsVersion       = "2.4.2"
 val catsEffectVersion = "2.3.3"
+val circeVersion      = "0.13.0"
 val coursierVersion   = "2.0.12"
 val fs2Version        = "2.5.3"
 val http4sVersion     = "0.21.20"
@@ -64,6 +65,24 @@ lazy val dockerSettings = Seq(
 
 //=== Sub-projects ============================================================
 
+lazy val `aws-lambda` = project
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(
+    name := "latis3-aws-lambda",
+    libraryDependencies ++= Seq(
+      "com.amazonaws"  % "aws-lambda-java-core" % "1.2.1",
+      "io.circe"      %% "circe-core"           % circeVersion,
+      "io.circe"      %% "circe-parser"         % circeVersion
+    ),
+    assembly / assemblyMergeStrategy := {
+      case x if x.endsWith("module-info.class") => MergeStrategy.discard
+      case x =>
+        val origStrategy = (assembly / assemblyMergeStrategy).value
+        origStrategy(x)
+    }
+  )
+
 lazy val core = project
   .dependsOn(`dap2-parser`)
   .dependsOn(macros)
@@ -72,7 +91,7 @@ lazy val core = project
     name := "latis3-core",
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-xml"           % "1.3.0",
-      "io.circe"               %% "circe-core"          % "0.13.0",
+      "io.circe"               %% "circe-core"          % circeVersion,
       "org.scodec"             %% "scodec-core"         % "1.11.7",
       "org.scodec"             %% "scodec-stream"       % "2.0.0",
       "org.http4s"             %% "http4s-blaze-client" % http4sVersion,
