@@ -48,7 +48,7 @@
                              "#!" sh "\n\n"
                              java " -jar " jar " \"$@\"\n"))))
                        (chmod wrapper #o755)))))))
-   (propagated-inputs (list `(,openjdk21 "jdk")
+   (propagated-inputs (list `(,openjdk25 "jdk")
                             ;; Uses tput.
                             ncurses))
    (synopsis "Pure Scala Artifact Fetching")
@@ -130,7 +130,7 @@ if #f."
                              "#!" sh "\n"
                              java " -cp \"" classpath "\" scala.meta.metals.Main"))))
                        (chmod wrapper #o755)))))))
-   (propagated-inputs (list bash `(,openjdk21 "jdk")))
+   (propagated-inputs (list bash `(,openjdk25 "jdk")))
    (synopsis "Scala language server")
    (description "Metals is a Scala language server with rich IDE features.")
    (home-page "https://scalameta.org/metals")
@@ -163,7 +163,7 @@ if #f."
     ;; NOTE: Not installing sbtn.
     (list #:install-plan ''(("bin/sbt" "bin/sbt"))))
    (propagated-inputs (list
-                       `(,openjdk21 "jdk")
+                       `(,openjdk25 "jdk")
                        ;; For infocmp
                        ncurses))
    (synopsis "Build tool for Scala")
